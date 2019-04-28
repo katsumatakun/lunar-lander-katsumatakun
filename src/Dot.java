@@ -8,7 +8,7 @@ public class Dot{
 
     public Dot(Point center) {
         this.center = center;
-        radius = 5;
+        radius = 11;
         color = Color.BLUE;
     }
 

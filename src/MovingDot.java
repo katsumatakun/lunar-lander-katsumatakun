@@ -47,9 +47,23 @@ public class MovingDot extends Dot{
         this.dy = dy;
     }
 
+    public void moveUp(){
+        dy-=1;
+    }
+    public void moveDown(){
+        dy+=1;
+    }
+    public void moveRight(){
+        dx+=1;
+    }
+    public void moveLeft(){
+        dx-=1;
+    }
+
     public void move(){
         x += dx;
-        y += dy;
+        dy+=.03;
+        y+= dy;
         location.x = (int)x;
         location.y = (int)y;
         //System.out.println(location);
@@ -86,5 +100,7 @@ public class MovingDot extends Dot{
     public void setSpeed(double speed) {
         this.speed = speed;
     }
+
+
 
 }
