@@ -1,6 +1,3 @@
-import org.w3c.dom.css.Rect;
-
-import javax.jws.soap.SOAPMessageHandlers;
 import java.awt.*;
 
 public class MovingDot extends Dot{
@@ -25,7 +22,6 @@ public class MovingDot extends Dot{
             dy = -dy;
         }
         setMotion(dx, dy);
-        System.out.println(dx + " " + dy);
     }
 
     public MovingDot(Point center) {

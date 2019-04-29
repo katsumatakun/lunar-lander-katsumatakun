@@ -7,11 +7,14 @@ public class Main {
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        LLController c = new LLController();
-        c.setLayout(null);
-        frame.getContentPane().add(c);
-
+        LLView v = new LLView();
+        LLModel m  = new LLModel();
+        LLController c = new LLController(v, m);
+        v.AddListener(c);
+        m.AddListener(c);
+        frame.getContentPane().add(v);
         frame.pack();
         frame.setVisible(true);
+        c.start();
     }
 }

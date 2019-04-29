@@ -1,80 +1,23 @@
-import javax.swing.*;
-import java.awt.*;
 import java.awt.event.*;
 
-public class LLController extends JPanel{
+public class LLController implements MoveListener, FinishListener{
 
     private LLView view;
     private LLModel model;
-    private int keyCode;
-    public LLController(){
-        setPreferredSize(new Dimension(500,500));
-        setFocusable(true);
-        addKeyListener(new MyKeyAdapter());
-        view = new LLView();
-        add(view.getLlLabel());
-        model = new LLModel();
-        Thread t = new Thread(new ballThread(model.getMd()));
-        t.start();
-    }
-    private class ballThread implements Runnable {
-
-        private MovingDot md;
-        private boolean finish;
-
-        public ballThread(MovingDot md) {
-            this.md = md;
-            finish = false;
-        }
-
-        @Override
-        public void run() {
-
-            while (!finish) {
-                if (md.top() < 0) {
-                    view.gameOver();
-                    finish = true;
-                }
-                if (getHeight() != 0 && md.bottom() > getHeight()) {
-                    view.gameWin();
-                    finish = true;
-                }
-                if (getWidth() != 0 && ((md.left() < 0) || md.right() > getWidth())) {
-                    view.gameOver();
-                    finish = true;
-                }
-                for (Mountain m:model.getMountains()){
-                    if(m.intersect(md.getRegion())){
-                        view.gameOver();
-                        finish = true;
-                    }
-                }
-                if(finish)
-                    System.exit(0);
-                md.move();
-                repaint();
-
-                try {
-                    Thread.sleep(15);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
+    public LLController(LLView view, LLModel model){
+          this.view = view;
+          this.view.AddListener(this );
+          this.model = model;
+          this.model.AddListener(this);
+          view.setMs(model.getMountains());
     }
 
-    @Override
-    protected void paintComponent(Graphics g){
-        super.paintComponent(g);
-        view.paint(g, model.getMountains(), model.getMd());
+    public void start(){
+        model.Move();
     }
-    private class MyKeyAdapter extends KeyAdapter {
 
-        @Override
-        public void keyPressed(KeyEvent e) {
-            keyCode = e.getKeyCode();
-            switch (keyCode){
+    public void onKey(int key){
+            switch (key){
                 case KeyEvent.VK_UP :
                     model.goUp();
                     break;
@@ -90,9 +33,22 @@ public class LLController extends JPanel{
             }
         }
 
+    @Override
+    public void makeMove(MoveEvent e){
+        MovingDot md = (MovingDot) e.getSource();
+        view.update(md);
     }
 
+    @Override
+    public void finish(FinishEvent e){
+        if((boolean)e.getSource()){
+            view.gameWin();
+        }
+        else {
+            view.gameOver();
+    }
+        System.exit(0);
 
-
+}
 
 }
