@@ -7,7 +7,6 @@ public class Mountain {
         private Point p3;
         private int[] xPoints;
         private int[] yPoints;
-        private Color color;
 
         public Mountain(Point p1, Point p2, Point p3) {
             this.p1 = p1;

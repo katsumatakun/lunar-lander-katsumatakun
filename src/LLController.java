@@ -1,14 +1,16 @@
 import java.awt.event.*;
 
-public class LLController implements MoveListener, FinishListener{
+public class LLController implements MoveListener, FinishListener, KeyListener{
 
     private LLView view;
     private LLModel model;
     public LLController(LLView view, LLModel model){
           this.view = view;
-          this.view.AddListener(this );
+          this.view.AddFinishListener(this );
+          this.view.addKeyListener(this);
           this.model = model;
-          this.model.AddListener(this);
+          this.model.AddMoveListener(this);
+          this.model.AddFinishListener(this);
           view.setMs(model.getMountains());
     }
 
@@ -50,5 +52,15 @@ public class LLController implements MoveListener, FinishListener{
         System.exit(0);
 
 }
+    @Override
+    public void keyPressed(KeyEvent e) {
+        onKey(e.getKeyCode());
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e){}
+
+    @Override
+    public void keyReleased(KeyEvent e){}
 
 }

@@ -7,7 +7,8 @@ public class LLModel {
     private int safeZone;
     private ArrayList<Mountain> mountains;
     private int energy;
-    private LLController controller;
+    private ArrayList<MoveListener> moveListeners;
+    private ArrayList<FinishListener> finishListeners;
     private boolean state;
 
     public LLModel() {
@@ -20,14 +21,12 @@ public class LLModel {
         generateMountains();
         energy = 15;
         state = true;
+        moveListeners = new ArrayList<>();
+        finishListeners = new ArrayList<>();
     }
 
     public ArrayList<Mountain> getMountains() {
         return mountains;
-    }
-
-    public MovingDot getMd() {
-        return md;
     }
 
     public void generateMountains() {
@@ -63,8 +62,12 @@ public class LLModel {
         }
     }
 
-    public void AddListener(LLController controller) {
-        this.controller = controller;
+    public void AddFinishListener(FinishListener fl) {
+        finishListeners.add(fl);
+    }
+
+    public void AddMoveListener(MoveListener ml) {
+        moveListeners.add(ml);
     }
 
     public void goUp() {
@@ -119,12 +122,14 @@ public class LLModel {
 
     public void notifyForFinish(){
         FinishEvent fe = new FinishEvent(state);
-        controller.finish(fe);
+        for(FinishListener f: finishListeners)
+            f.finish(fe);
     }
 
     public void notifyForMove() {
         MoveEvent e = new MoveEvent(md);
-        controller.makeMove(e);
+        for(MoveListener ml : moveListeners)
+            ml.makeMove(e);
     }
 
 }

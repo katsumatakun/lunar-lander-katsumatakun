@@ -10,8 +10,6 @@ public class Main {
         LLView v = new LLView();
         LLModel m  = new LLModel();
         LLController c = new LLController(v, m);
-        v.AddListener(c);
-        m.AddListener(c);
         frame.getContentPane().add(v);
         frame.pack();
         frame.setVisible(true);

@@ -7,22 +7,22 @@ import java.util.ArrayList;
 public class LLView extends JPanel{
 
     private LLLabel llLabel;
-    private LLController controller;
+    private ArrayList<FinishListener> finishListeners;
     private ArrayList<Mountain> ms;
     public LLView(){
         setLayout(null);
         setFocusable(true);
-        addKeyListener(new MyKeyAdapter());
         setPreferredSize(new Dimension(500,500));
         llLabel = new LLLabel();
         add(llLabel);
         llLabel.setBounds(250, 30, 25, 30);
+        finishListeners = new ArrayList<>();
     }
 
     public void setMs(ArrayList<Mountain> ms){this.ms = ms;}
 
-    public void AddListener( LLController controller ) {
-        this.controller = controller;
+    public void AddFinishListener( FinishListener fl ) {
+         finishListeners.add(fl);
     }
 
     public void gameOver(){
@@ -34,7 +34,7 @@ public class LLView extends JPanel{
         JOptionPane.showMessageDialog(null, "Nice job!!!.");
     }
     public void update(MovingDot md){
-        llLabel.updateLocation(new Point(md.left(), md.top()));
+        llLabel.setLocation(new Point(md.left(), md.top()));
         if (md.top() < 0) {
             notifyForFinish(false);
         }
@@ -55,15 +55,8 @@ public class LLView extends JPanel{
 
     public void notifyForFinish(boolean state){
         FinishEvent fe = new FinishEvent(state);
-        controller.finish(fe);
-    }
-
-    private class MyKeyAdapter extends KeyAdapter {
-
-        @Override
-        public void keyPressed(KeyEvent e) {
-            controller.onKey(e.getKeyCode());
-        }
+        for(FinishListener fl: finishListeners)
+            fl.finish(fe);
     }
 
 }
