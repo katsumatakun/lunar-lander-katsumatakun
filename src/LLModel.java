@@ -10,6 +10,7 @@ public class LLModel {
     private ArrayList<MoveListener> moveListeners;
     private ArrayList<FinishListener> finishListeners;
     private boolean state;
+    private Dimension display;
 
     public LLModel() {
 
@@ -23,6 +24,7 @@ public class LLModel {
         state = true;
         moveListeners = new ArrayList<>();
         finishListeners = new ArrayList<>();
+        display = new Dimension(500, 500);
     }
 
     public ArrayList<Mountain> getMountains() {
@@ -100,7 +102,20 @@ public class LLModel {
 
     public void Move() {
         boolean end = false;
+
         while(!end) {
+
+            if (md.top() < 0) {
+                state = false;
+                notifyForFinish();
+            }
+            if (display.height!= 0 && md.bottom() > display.height) {
+                notifyForFinish();
+            }
+            if (display.width != 0 && ((md.left() < 0) || md.right() > display.width)) {
+                state=false;
+                notifyForFinish();
+            }
             for (Mountain m : mountains) {
                 if (m.intersect(md.getRegion())){
                     end = true;
@@ -131,5 +146,7 @@ public class LLModel {
         for(MoveListener ml : moveListeners)
             ml.makeMove(e);
     }
+
+    public Dimension getDisplay(){return display;}
 
 }

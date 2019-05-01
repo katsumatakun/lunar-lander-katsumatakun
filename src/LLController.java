@@ -12,6 +12,7 @@ public class LLController implements MoveListener, FinishListener, KeyListener{
           this.model.AddMoveListener(this);
           this.model.AddFinishListener(this);
           view.setMs(model.getMountains());
+          view.setPreferredSize(model.getDisplay());
     }
 
     public void start(){
